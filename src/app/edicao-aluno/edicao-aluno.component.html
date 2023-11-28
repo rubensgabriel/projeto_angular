@@ -10,19 +10,34 @@
                     <div class="input-area">
                         <label for="nome">Nome:</label>
                         <input type="text" id="nome" formControlName="nome" name="aluno" required>
+                        <div *ngIf="formulario.get('nome')?.hasError('required') && formulario.get('nome')?.touched">
+                            * Campo obrigatório
+                          </div>
                     </div>
                     <div class="input-area">
                         <label for="email">Email:</label>
                         <input type="email" id="email" formControlName="email" name="email" required>
+                        <div *ngIf="formulario.get('email')?.hasError('email') && formulario.get('email')?.touched">
+                            * Email inválido
+                        </div>
+                        <div *ngIf="formulario.get('email')?.hasError('required') && formulario.get('email')?.touched">
+                            * Campo obrigatório
+                          </div>
                     </div>
                     <div class="form-sub-section">
                         <div class="input-area">
                             <label for="idade">Idade:</label>
                             <input type="number" id="idade" formControlName="idade" name="idade" required>
+                            <div *ngIf="formulario.get('idade')?.hasError('required') && formulario.get('idade')?.touched">
+                                * Campo obrigatório
+                            </div>
                         </div>
                         <div class="input-area">
                             <label for="matricula">Matrícula:</label>
                             <input type="text" id="matricula" formControlName="matricula" name="matricula" required>
+                            <div *ngIf="formulario.get('matricula')?.hasError('required') && formulario.get('matricula')?.touched">
+                                * Campo obrigatório
+                            </div>
                         </div>
                     </div>
 
