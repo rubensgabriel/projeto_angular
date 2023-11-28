@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -8,12 +7,6 @@ import { BehaviorSubject } from 'rxjs';
 export class AlunoService {
 
   private alunos: any[] = [];
-
-  //private alunos = [
-  //{ nome: 'João', email: 'joao@example.com', idade: 25, matricula: '12345' },
-  //{ nome: 'Maria', email: 'maria@example.com', idade: 22, matricula: '67890' }
-  //];
-
   private alunosSubject = new BehaviorSubject<any[]>(this.alunos);
 
   getAlunos() {
@@ -29,21 +22,30 @@ export class AlunoService {
   }
 
   adicionarAluno(aluno: any) {
-    const alunosAtualizados = [...this.alunosSubject.value, aluno];
-    this.alunosSubject.next(alunosAtualizados);
+    const alunosAtuais = this.alunosSubject.value.slice(); // Cria uma cópia da lista atual de alunos
+    alunosAtuais.push(aluno); // Adiciona o novo aluno à lista
+    this.alunosSubject.next(alunosAtuais); // Emite a nova lista de alunos para o Subject
     console.log('Aluno adicionado ao serviço:', aluno);
   }
 
   editarAluno(index: number, aluno: any) {
-    const alunosAtualizados = [...this.alunosSubject.value];
-    alunosAtualizados[index] = aluno;
-    this.alunosSubject.next(alunosAtualizados);
+    const alunosAtuais = this.alunosSubject.value.slice(); // Cria uma cópia da lista atual de alunos
+    if (index >= 0 && index < alunosAtuais.length) {
+      alunosAtuais[index] = aluno; // Atualiza o aluno na posição especificada
+      this.alunosSubject.next(alunosAtuais); // Emite a lista atualizada para o Subject
+    } else {
+      console.error('Índice inválido para edição.');
+    }
   }
 
   excluirAluno(index: number) {
-    const alunosAtualizados = [...this.alunosSubject.value];
-    alunosAtualizados.splice(index, 1);
-    this.alunosSubject.next(alunosAtualizados);
+    const alunosAtuais = this.alunosSubject.value.slice(); // Cria uma cópia da lista atual de alunos
+    if (index >= 0 && index < alunosAtuais.length) {
+      alunosAtuais.splice(index, 1); // Remove o aluno na posição especificada
+      this.alunosSubject.next(alunosAtuais); // Emite a lista atualizada para o Subject
+    } else {
+      console.error('Índice inválido para exclusão.');
+    }
   }
 }
 

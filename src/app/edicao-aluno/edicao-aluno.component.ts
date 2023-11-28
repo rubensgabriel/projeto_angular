@@ -32,39 +32,32 @@ export class EdicaoAlunoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-      
-
-    //console.log('Dados do aluno após teste:', this.formBuilder);
      
     this.route.params.subscribe(params => {
       if (params['index']) {
         this.index = +params['index'];
         this.aluno = this.alunoService.getAluno(this.index);
         this.formulario.setValue({...this.aluno})
-        //this.aluno = { ...alunos[this.index] }; // Garante uma cópia para evitar referências compartilhadas
         this.editar = true;
-  
-        console.log('Dados do aluno no ngOnInit:', this.aluno);
       }
     });
   }
-  
-  onSubmit() {
+
+  async onSubmit() {
     if (this.formulario.valid) {
-            
       this.aluno = { ...this.aluno, ...this.formulario.value };
-        
-      // Chama o serviço para adicionar ou atualizar o aluno
-      if (this.editar) {
-        // Se estiver editando, chama o método de editar do serviço
-        this.alunoService.editarAluno(this.index!, this.aluno);
-      } else {
-        // Se não estiver editando, chama o método de adicionar do serviço
-        this.alunoService.adicionarAluno(this.aluno);
-      }
+      
+      try {
+        if (this.editar) {
+          await this.alunoService.editarAluno(this.index!, this.aluno);
+        } else {
+          await this.alunoService.adicionarAluno(this.aluno);
+        }
   
-      // Navega para a rota de listar após salvar
-      this.router.navigate(['/listar']);
+        this.router.navigate(['/listar']);
+      } catch (error) {
+        console.error('Ocorreu um erro! Verifique seus dados e tente novamente!', error);
+      }
     } else {
       console.error('Ocorreu um erro! Verifique seus dados e tente novamente!');
     }
